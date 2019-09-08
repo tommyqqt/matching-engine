@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market.engine;
+package au.com.tommyq.engine;
 
-public interface Order extends Event {
-    String user();
+public enum Side {
+    BID("bought"), OFFER("sold"), NULL_VAL("");
 
-    String instrument();
+    private String verb;
 
-    Side side();
+    Side(final String verb) {
+        this.verb = verb;
+    }
 
-    int quantity();
-
-    void quantity(int quantity);
-
-    long price();
+    public String verb() {
+        return this.verb;
+    }
 }

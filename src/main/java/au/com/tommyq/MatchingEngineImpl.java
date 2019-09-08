@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market;
+package au.com.tommyq;
 
-import au.com.tommyq.market.engine.*;
+import au.com.tommyq.engine.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

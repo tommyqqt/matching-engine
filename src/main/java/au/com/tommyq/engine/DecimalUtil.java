@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market.engine;
+package au.com.tommyq.engine;
 
 import java.text.DecimalFormat;
 

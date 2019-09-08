@@ -22,30 +22,37 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market.engine;
+package au.com.tommyq.engine;
 
-public class MutableOrder implements Order {
-    private String user;
-    private String instrument;
-    private Side side;
-    private int quantity;
-    private long price;
+public class DefaultExecutionReport implements ExecutionReport {
+    private final String instrument;
+    private final String user;
+    private final String cpty;
+    private final Side side;
+    private final Side cptySide;
+    private final long price;
+    private final int quantity;
+    private final OrdStatus ordStatus;
+    private final String reason;
 
-    public MutableOrder(final String user,
-                        final String instrument,
-                        final Side side,
-                        final int quantity,
-                        final long price) {
-        this.user = user;
+    public DefaultExecutionReport(final String instrument,
+                                  final String user,
+                                  final Side side,
+                                  final String cpty,
+                                  final Side cptySide,
+                                  final long price,
+                                  final int quantity,
+                                  final OrdStatus ordStatus,
+                                  final String reason) {
         this.instrument = instrument;
+        this.user = user;
         this.side = side;
-        this.quantity = quantity;
+        this.cpty = cpty;
+        this.cptySide = cptySide;
         this.price = price;
-    }
-
-    @Override
-    public String user() {
-        return this.user;
+        this.quantity = quantity;
+        this.ordStatus = ordStatus;
+        this.reason = reason;
     }
 
     @Override
@@ -54,8 +61,28 @@ public class MutableOrder implements Order {
     }
 
     @Override
+    public String user() {
+        return this.user;
+    }
+
+    @Override
+    public String cpty() {
+        return this.cpty;
+    }
+
+    @Override
     public Side side() {
         return this.side;
+    }
+
+    @Override
+    public Side cptySide() {
+        return this.cptySide;
+    }
+
+    @Override
+    public long price() {
+        return this.price;
     }
 
     @Override
@@ -64,12 +91,12 @@ public class MutableOrder implements Order {
     }
 
     @Override
-    public void quantity(final int quantity) {
-        this.quantity = quantity;
+    public OrdStatus ordStatus() {
+        return ordStatus;
     }
 
     @Override
-    public long price() {
-        return this.price;
+    public String reason() {
+        return this.reason;
     }
 }

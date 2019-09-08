@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market.cli;
+package au.com.tommyq.cli;
 
-import au.com.tommyq.market.MatchingEngine;
-import au.com.tommyq.market.engine.Side;
+import au.com.tommyq.MatchingEngine;
+import au.com.tommyq.engine.Side;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -22,30 +22,37 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market;
+package au.com.tommyq;
 
-import au.com.tommyq.market.cli.MatchingEngineCLI;
+public class InstrumentConfig {
+    private final String name;
+    private final double minPrice;
+    private final double maxPrice;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
-
-public class MatchingEngineMain {
-
-    public static void main(String[] args) {
-        //Loading instruments configuration from properties file
-        final Config config = new Config();
-        config.loadConfig();
-        System.out.println();
-
-        final Queue<String> queue = new ConcurrentLinkedQueue<>();
-        final MatchingEngineImpl market = new MatchingEngineImpl(config.instrumentConfigs(), newSingleThreadExecutor(), queue::offer);
-
-        final MatchingEngineCLI cli = new MatchingEngineCLI(market, queue);
-        market.start();
-        cli.start();
-        market.stop();
+    public InstrumentConfig(final String name, final double minPrice, final double maxPrice) {
+        this.name = name;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
     }
 
+    public String name() {
+        return this.name;
+    }
+
+    public double minPrice() {
+        return this.minPrice;
+    }
+
+    public double maxPrice() {
+        return this.maxPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "InstrumentConfig{" +
+                "name='" + name + '\'' +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                '}';
+    }
 }

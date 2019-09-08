@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market;
+package au.com.tommyq;
 
 import org.apache.logging.log4j.util.Strings;
 

@@ -22,18 +22,8 @@
  * SOFTWARE.
  */
 
-package au.com.tommyq.market;
+package au.com.tommyq.engine;
 
-public interface MatchingEngine {
-    void placeBid(final String name,
-                  final String instrument,
-                  final int quantity,
-                  final double price);
+public interface Event {
 
-    void placeOffer(final String name,
-                    final String instrument,
-                    final int quantity,
-                    final double price);
-
-    void display(final String instrument);
 }
