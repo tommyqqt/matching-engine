@@ -28,6 +28,7 @@ Assumptions in this implementation of this CLOB-Matching Engine:
       InstrumentConfig{name='GBPEUR', minPrice=1.05, maxPrice=2.2}    
 
       Place your order
+      
       Input Command: AbcCapital OFFER 10 USDCAD @ $2.99  
       Input Command: SuperInvestment BID 5 USDCAD @ $2.98  
       Input Command: Display USDCAD  
