@@ -80,7 +80,7 @@ public class MatchingEngineImplTest {
 
         matchingEngine.placeOffer("AbcCapital", "EURUSD", 2, 1.5);
         matchingEngine.placeOffer("AbcCapital", "EURUSD", 17, 1.6);
-        matchingEngine.placeOffer("Sally", "EURUSD", 16, 1.6);
+        matchingEngine.placeOffer("NewBank", "EURUSD", 16, 1.6);
         matchingEngine.placeBid("OneBank", "EURUSD", 8, 1.61);
         matchingEngine.display("EURUSD");
 
