@@ -3,17 +3,11 @@
 
 Assumptions in this implementation of this CLOB-Matching Engine:
 - Simple interactive command line interface to manually place orders and see execution reports
+- Price time priority (order of arrival) order matching
 - Each limit order book handles one specific instrument (ccypair)
 - Tick value = $0.01
-- Prices in double are converted to long with precision = 2
 - For each instrument, its prices move within a minimum and maximum pre-configured values
 - No auto adjust of min and max price
-- Price levels are kept in an array indexed by price
-- The order book maintains an index to the best bid/offer level
-- Each price level has an array-list of resting orders at this price
-- The resting orders array list has an initial capacity = 20. Assuming there are typically at most 20 resting
-  orders per price level
-- New orders are processed in order of arrival
 - Uncrossed orders are appended to the resting orders list of the respective price levels
 - If an order is partially crossed, the order will be appended to the respective level with the unfilled quantity (FAS)
 
