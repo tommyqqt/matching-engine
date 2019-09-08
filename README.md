@@ -1,4 +1,6 @@
 # CLOB-Matching-Engine
+### A reference implementation in Java of a central limit order book - matching engine that is low latency and low gc 
+
 Assumptions in this implementation of this CLOB-Matching Engine:
 - Simple interactive command line interface to manually place orders and see execution reports
 - Each limit order book handles one specific instrument (ccypair)
