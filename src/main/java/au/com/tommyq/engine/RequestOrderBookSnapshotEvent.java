@@ -24,9 +24,20 @@
 
 package au.com.tommyq.engine;
 
-public interface OrderBook {
-    void processOrder(MutableOrder order);
-    String instrument();
-    TopOfBookReport topOfBookRpt();
-    OrderBookSnapshot snapshot(int requestedDepthOfBook);
+public class RequestOrderBookSnapshotEvent implements Event {
+    private final String instrument;
+    private final int depthOfBook;
+
+    public RequestOrderBookSnapshotEvent(String instrument, int depthOfBook) {
+        this.instrument = instrument;
+        this.depthOfBook = depthOfBook;
+    }
+
+    public String instrument() {
+        return this.instrument;
+    }
+
+    public int depthOfBook() {
+        return this.depthOfBook;
+    }
 }

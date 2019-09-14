@@ -33,9 +33,5 @@ public interface PriceLevel {
 
     void quantity(int quantity);
 
-    List<MutableOrder> restingOrders();
-
-    void addOrder(final MutableOrder order);
-
-    boolean clear();
+    List<Order> restingOrder();
 }

@@ -39,6 +39,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static au.com.tommyq.Reporting.reportExecRpt;
+import static au.com.tommyq.Reporting.reportTopOfBook;
+
 /**
  * This implementation maintains an event loop that polls for or offers events to an event queue
  * Input events:  Orders and commands
@@ -89,6 +92,12 @@ public class MatchingEngineImpl implements MatchingEngine {
         eventQueue.offer(displayEvent);
     }
 
+    @Override
+    public void requestOrderBookSnapshot(final String instrument, final int requestedDepth) {
+        final RequestOrderBookSnapshotEvent requestOrderBookSnapshotEvent = new RequestOrderBookSnapshotEvent(instrument, requestedDepth);
+        eventQueue.offer(requestOrderBookSnapshotEvent);
+    }
+
     public void start(){
         executorService.execute(this::run);
     }
@@ -106,8 +115,10 @@ public class MatchingEngineImpl implements MatchingEngine {
                 onOrder((MutableOrder)event);
             } else if (event instanceof DisplayEvent){
                 onDisplay((DisplayEvent)event);
-            } else if (event instanceof ExecutionReport){
-                onExecutionReport((ExecutionReport)event);
+            } else if (event instanceof ExecutionReport) {
+                onExecutionReport((ExecutionReport) event);
+            } else if (event instanceof RequestOrderBookSnapshotEvent) {
+                onRequestOrderBookSnapshot((RequestOrderBookSnapshotEvent) event);
             } else {
                 //Poor man's idle strategy
                 //Gentler on cpu
@@ -130,35 +141,21 @@ public class MatchingEngineImpl implements MatchingEngine {
         }
     }
 
+    private void onRequestOrderBookSnapshot(final RequestOrderBookSnapshotEvent requestOrderBookSnapshotEvent){
+        final OrderBook orderBook = orderBooks.get(requestOrderBookSnapshotEvent.instrument());
+        if(orderBook != null){
+            OrderBookSnapshot snapshot = orderBook.snapshot(requestOrderBookSnapshotEvent.depthOfBook());
+            System.out.println(snapshot);
+        }
+    }
+
+
+
     private void onTopOfBookReport(final TopOfBookReport report){
-        final String result = String.format("%d %s | %s %d",
-                report.bestBidQuantity(),
-                DecimalUtil.format(DecimalUtil.toDouble(report.bestBid())),
-                DecimalUtil.format(DecimalUtil.toDouble(report.bestOffer())),
-                report.bestOfferQuantity());
-        consoleConsumer.accept(result);
+        consoleConsumer.accept(reportTopOfBook(report));
     }
 
     private void onExecutionReport(final ExecutionReport execRpt){
-        final String result;
-        if(execRpt.ordStatus() == OrdStatus.FILLED){
-            result = String.format("%s %s %d %s from %s @ %s",
-                    execRpt.cpty(),
-                    execRpt.cptySide().verb(),
-                    execRpt.quantity(),
-                    execRpt.instrument(),
-                    execRpt.user(),
-                    DecimalUtil.format(DecimalUtil.toDouble(execRpt.price())));
-        } else {
-            result = String.format("%s %s %d %s @ %s %s (%s)",
-                    execRpt.user(),
-                    execRpt.side(),
-                    execRpt.quantity(),
-                    execRpt.instrument(),
-                    DecimalUtil.format(DecimalUtil.toDouble(execRpt.price())),
-                    execRpt.ordStatus(),
-                    execRpt.reason());
-        }
-        consoleConsumer.accept(result);
+        consoleConsumer.accept(reportExecRpt(execRpt));
     }
 }

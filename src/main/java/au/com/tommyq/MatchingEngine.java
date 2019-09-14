@@ -36,4 +36,6 @@ public interface MatchingEngine {
                     final double price);
 
     void display(final String instrument);
+
+    void requestOrderBookSnapshot(final String instrument, final int requestedDepth);
 }

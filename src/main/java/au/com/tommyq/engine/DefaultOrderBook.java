@@ -114,7 +114,7 @@ public class DefaultOrderBook implements OrderBook {
 
             //cross resting orders at this level
             if(bidOrder.price() >= level.price()){
-                for(MutableOrder restingOrder : level.restingOrders()){
+                for(MutableOrder restingOrder : level.restingMutableOrders()){
                     if(bidOrder.quantity() == 0){
                         return;
                     }
@@ -139,7 +139,7 @@ public class DefaultOrderBook implements OrderBook {
 
             //cross resting orders at this level
             if(offerOrder.price() <= level.price()){
-                for(MutableOrder restingOrder : level.restingOrders()){
+                for(MutableOrder restingOrder : level.restingMutableOrders()){
                     if(offerOrder.quantity() == 0){
                         return;
                     }
@@ -204,6 +204,39 @@ public class DefaultOrderBook implements OrderBook {
         final DefaultPriceLevel bestBidLevel = topBookBid > -1 ? depth[topBookBid] : NULL_LEVEL;
         final DefaultPriceLevel bestOfferLevel = topBookOffer < depth.length ?  depth[topBookOffer] : NULL_LEVEL;
         return new TopOfBookReport(bestBidLevel.price(), bestOfferLevel.price(), bestBidLevel.quantity(), bestOfferLevel.quantity());
+    }
+
+    @Override
+    public OrderBookSnapshot snapshot(final int depthOfBook){
+        final PriceLevel[] reportedDepth;
+
+        if(depthOfBook < 0){
+            reportedDepth = new PriceLevel[depth.length];
+            for(int i = 0; i < depth.length; i++){
+                reportedDepth[i] = depth[i];
+            }
+        } else {
+            reportedDepth = new PriceLevel[depthOfBook * 2];
+            int bidBookIndex = topBookBid;
+            int offerBookIndex = topBookOffer;
+            int rptBookBidIndex = depthOfBook - 1;
+            int rptBookOfferIndex = depthOfBook;
+
+            while (bidBookIndex >= 0
+                    && rptBookBidIndex >= 0
+                    && offerBookIndex < depth.length
+                    && rptBookOfferIndex < reportedDepth.length)
+            {
+                reportedDepth[rptBookBidIndex] = depth[bidBookIndex];
+                reportedDepth[rptBookOfferIndex] = depth[offerBookIndex];
+                bidBookIndex--;
+                rptBookBidIndex--;
+                offerBookIndex++;
+                rptBookOfferIndex++;
+            }
+        }
+
+        return new OrderBookSnapshot(instrument, reportedDepth);
     }
 
 }

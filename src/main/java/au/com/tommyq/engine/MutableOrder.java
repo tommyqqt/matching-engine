@@ -63,7 +63,6 @@ public class MutableOrder implements Order {
         return this.quantity;
     }
 
-    @Override
     public void quantity(final int quantity) {
         this.quantity = quantity;
     }

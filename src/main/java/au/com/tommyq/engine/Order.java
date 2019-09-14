@@ -33,7 +33,5 @@ public interface Order extends Event {
 
     int quantity();
 
-    void quantity(int quantity);
-
     long price();
 }

@@ -41,6 +41,7 @@ public class MatchingEngineCLI {
 
     private static final String EXIT = "exit";
     private static final String DISPLAY = "Display";
+    private static final String SNAPSHOT = "Snapshot";
 
     private final Queue<String> queue;
     private final MatchingEngine matchingEngine;
@@ -79,6 +80,12 @@ public class MatchingEngineCLI {
         if(tokens.length == 2){
             if(tokens[0].equals(DISPLAY)){
                 matchingEngine.display(tokens[1]);
+            }
+        } else if (tokens.length == 3) {
+            if(tokens[0].equals(SNAPSHOT)){
+                final String instrument = tokens[1];
+                final int depth = Integer.parseInt(tokens[2]);
+                matchingEngine.requestOrderBookSnapshot(instrument, depth);
             }
         } else if (tokens.length == 6){
             final String user = tokens[0];

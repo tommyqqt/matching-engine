@@ -68,11 +68,18 @@ public class DefaultPriceLevel implements PriceLevel {
     }
 
     @Override
-    public List<MutableOrder> restingOrders() {
-        return Collections.unmodifiableList(this.restingOrders);
+    public List<Order> restingOrder() {
+        final List<Order> results = new ArrayList<>(restingOrdersSize);
+        for(int i = 0; i < restingOrdersSize; i++){
+            results.add(restingOrders.get(i));
+        }
+        return results;
     }
 
-    @Override
+    public List<MutableOrder> restingMutableOrders() {
+        return restingOrders;
+    }
+
     public void addOrder(final MutableOrder order){
         if(restingOrdersSize < restingOrders.size()){
             final int index = restingOrdersSize == 0 ? 0 : restingOrdersSize - 1;
@@ -84,7 +91,6 @@ public class DefaultPriceLevel implements PriceLevel {
         restingOrdersSize++;
     }
 
-    @Override
     public boolean clear(){
         if(quantity == 0){
             restingOrdersSize = 0;
