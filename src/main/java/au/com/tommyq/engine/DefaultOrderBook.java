@@ -209,8 +209,11 @@ public class DefaultOrderBook implements OrderBook {
     @Override
     public OrderBookSnapshot snapshot(final int depthOfBook){
         final PriceLevel[] reportedDepth;
-
+        final int rptTopBookBid;
+        final int rptTopBookOffer;
         if(depthOfBook < 0){
+            rptTopBookBid = topBookBid;
+            rptTopBookOffer = topBookOffer;
             reportedDepth = new PriceLevel[depth.length];
             for(int i = 0; i < depth.length; i++){
                 reportedDepth[i] = depth[i];
@@ -221,6 +224,8 @@ public class DefaultOrderBook implements OrderBook {
             int offerBookIndex = topBookOffer;
             int rptBookBidIndex = depthOfBook - 1;
             int rptBookOfferIndex = depthOfBook;
+            rptTopBookBid = rptBookBidIndex;
+            rptTopBookOffer = rptBookOfferIndex;
 
             while (bidBookIndex >= 0
                     && rptBookBidIndex >= 0
@@ -236,7 +241,7 @@ public class DefaultOrderBook implements OrderBook {
             }
         }
 
-        return new OrderBookSnapshot(instrument, reportedDepth);
+        return new OrderBookSnapshot(instrument, reportedDepth, rptTopBookBid, rptTopBookOffer);
     }
 
 }

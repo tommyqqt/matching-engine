@@ -76,16 +76,20 @@ public class MatchingEngineCLI {
         if(Strings.isBlank(commandStr)){
             return;
         }
-        final String[] tokens = commandStr.split(command_delimiter);
+        final String[] tokens = commandStr.trim().split(command_delimiter);
         if(tokens.length == 2){
             if(tokens[0].equals(DISPLAY)){
                 matchingEngine.display(tokens[1]);
+            } else if (tokens[0].equals(SNAPSHOT)){
+                processSnapshotCommand(tokens);
+            } else {
+                System.out.println("Bad command: " + commandStr);
             }
         } else if (tokens.length == 3) {
             if(tokens[0].equals(SNAPSHOT)){
-                final String instrument = tokens[1];
-                final int depth = Integer.parseInt(tokens[2]);
-                matchingEngine.requestOrderBookSnapshot(instrument, depth);
+                processSnapshotCommand(tokens);
+            } else {
+                System.out.println("Bad command: " + commandStr);
             }
         } else if (tokens.length == 6){
             final String user = tokens[0];
@@ -106,8 +110,19 @@ public class MatchingEngineCLI {
         }
     }
 
+    private void processSnapshotCommand(final String[] tokens){
+        final String instrument = tokens[1];
+        final int depth;
+        if(tokens.length == 2){
+            depth = -1;
+        } else {
+            depth = Integer.parseInt(tokens[2]);
+        }
+        matchingEngine.requestOrderBookSnapshot(instrument, depth);
+    }
+
     private void pollForResponses(){
-        final int maxRetry = 10;
+        final int maxRetry = 100;
         int retry = 0;
         while(!Thread.currentThread().isInterrupted()){
             final String commandResult = queue.poll();

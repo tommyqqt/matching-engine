@@ -59,7 +59,23 @@ public class Reporting {
     }
 
     public static String reportBookSnapshot(final OrderBookSnapshot snapshot){
-        return null;
+        final int rptBestBidIndex = snapshot.bestBidIndex();
+        final int rptBestOfferIndex = snapshot.bestOfferIndex();
+        final StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%1$-15s ArrayIndex  Level   Quantity  | Orders\n", ""));
+        final PriceLevel[] depthSnapshot = snapshot.getDepthSnapshot();
+        for (int i = depthSnapshot.length - 1; i >= 0; i--){
+            if(i == rptBestBidIndex && depthSnapshot[i] != null){
+                sb.append(String.format("%1$-15s %2$-12s", "Best BID   -->", i));
+            } else if ((i == rptBestOfferIndex) && depthSnapshot[i] != null) {
+                sb.append(String.format("%1$-15s %2$-12s", "Best OFFER -->", i));
+            } else {
+                sb.append(String.format("%1$-15s %2$-12s", "", i));
+            }
+            sb.append(depthSnapshot[i] != null ? formatPriceLevel(depthSnapshot[i]) : "");
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     public static String formatPriceLevel(final PriceLevel level){
@@ -67,7 +83,7 @@ public class Reporting {
         sb.append(String.format("%1$-7s %2$-9s |", DecimalUtil.format(DecimalUtil.toDouble(level.price())), level.quantity()));
         sb.append(" ");
 
-        for(Order order : level.restingOrder()){
+        for (Order order : level.restingOrder()) {
             sb.append(String.format("%1$-6s", order.quantity()));
         }
 

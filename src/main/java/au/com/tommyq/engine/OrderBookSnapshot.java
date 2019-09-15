@@ -27,10 +27,14 @@ package au.com.tommyq.engine;
 public class OrderBookSnapshot implements Event {
     private final String instrument;
     private final PriceLevel[] depthSnapshot;
+    private final int bestBidIndex;
+    private final int bestOfferIndex;
 
-    public OrderBookSnapshot(final String instrument, final PriceLevel[] depthSnapshot) {
+    public OrderBookSnapshot(final String instrument, final PriceLevel[] depthSnapshot, final int bestBidIndex, final int bestOfferIndex) {
         this.instrument = instrument;
         this.depthSnapshot = depthSnapshot;
+        this.bestBidIndex = bestBidIndex;
+        this.bestOfferIndex = bestOfferIndex;
     }
 
     public String getInstrument() {
@@ -39,5 +43,13 @@ public class OrderBookSnapshot implements Event {
 
     public PriceLevel[] getDepthSnapshot() {
         return depthSnapshot;
+    }
+
+    public int bestBidIndex() {
+        return this.bestBidIndex;
+    }
+
+    public int bestOfferIndex() {
+        return this.bestOfferIndex;
     }
 }

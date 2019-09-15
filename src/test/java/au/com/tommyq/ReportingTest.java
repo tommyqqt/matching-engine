@@ -24,31 +24,38 @@
 
 package au.com.tommyq;
 
-import au.com.tommyq.engine.DefaultPriceLevel;
-import au.com.tommyq.engine.MutableOrder;
-import au.com.tommyq.engine.PriceLevel;
-import au.com.tommyq.engine.Side;
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+import au.com.tommyq.engine.*;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ReportingTest {
 
-    @Test
-    public void testFormatPriceLevel() {
+    //@Test
+    public void testFormatBookSnapshot() {
         final DefaultPriceLevel level = new DefaultPriceLevel(76, 0, 20);
         level.addOrder(new MutableOrder("testUser1", "AUDUSD", Side.OFFER, 1, 76));
         level.addOrder(new MutableOrder("testUser1", "AUDUSD", Side.OFFER, 50, 76));
         level.addOrder(new MutableOrder("testUser1", "AUDUSD", Side.OFFER, 100, 76));
 
-        final DefaultPriceLevel level2 = new DefaultPriceLevel(75, 0, 20);
-        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 250, 75));
-        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 12, 75));
-        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 8, 75));
+        final DefaultPriceLevel level2 = new DefaultPriceLevel(78, 0, 20);
+        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 250, 78));
+        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 12, 78));
+        level2.addOrder(new MutableOrder("testUser2", "AUDUSD", Side.OFFER, 8, 78));
 
-        System.out.println("Price   Quantity  | Orders");
-        System.out.println(Reporting.formatPriceLevel(level));
-        System.out.println(Reporting.formatPriceLevel(level2));
+        final PriceLevel[] depth = new PriceLevel[6];
+        depth[3] = level;
+        depth[2] = level2;
+        final String expected = "                ArrayIndex  Price   Quantity  | Orders\n" +
+                "                5            \n" +
+                "                4            \n" +
+                "Best OFFER -->  3           $0.76   151       | 1     50    100   \n" +
+                "Best BID   -->  2           $0.78   270       | 250   12    8     \n" +
+                "                1            \n" +
+                "                0            \n";
+
+        final OrderBookSnapshot snapshot = new OrderBookSnapshot("AUDUSD", depth, depth.length/2 - 1, depth.length/2);
+        assertEquals(expected, Reporting.reportBookSnapshot(snapshot));
     }
+
 }

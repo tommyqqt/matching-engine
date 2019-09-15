@@ -39,8 +39,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static au.com.tommyq.Reporting.reportExecRpt;
-import static au.com.tommyq.Reporting.reportTopOfBook;
+import static au.com.tommyq.Reporting.*;
 
 /**
  * This implementation maintains an event loop that polls for or offers events to an event queue
@@ -144,12 +143,9 @@ public class MatchingEngineImpl implements MatchingEngine {
     private void onRequestOrderBookSnapshot(final RequestOrderBookSnapshotEvent requestOrderBookSnapshotEvent){
         final OrderBook orderBook = orderBooks.get(requestOrderBookSnapshotEvent.instrument());
         if(orderBook != null){
-            OrderBookSnapshot snapshot = orderBook.snapshot(requestOrderBookSnapshotEvent.depthOfBook());
-            System.out.println(snapshot);
+            onOrderBookSnapshot(orderBook.snapshot(requestOrderBookSnapshotEvent.depthOfBook()));
         }
     }
-
-
 
     private void onTopOfBookReport(final TopOfBookReport report){
         consoleConsumer.accept(reportTopOfBook(report));
@@ -157,5 +153,10 @@ public class MatchingEngineImpl implements MatchingEngine {
 
     private void onExecutionReport(final ExecutionReport execRpt){
         consoleConsumer.accept(reportExecRpt(execRpt));
+    }
+
+    private void onOrderBookSnapshot(final OrderBookSnapshot snapshot){
+        final String report = reportBookSnapshot(snapshot);
+        consoleConsumer.accept(report);
     }
 }
