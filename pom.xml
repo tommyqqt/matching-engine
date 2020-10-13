@@ -33,7 +33,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.13.1</version.junit>
         <version.log4j>2.9.0</version.log4j>
         <version.guava>21.0</version.guava>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
